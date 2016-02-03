@@ -36,7 +36,7 @@ class ClientTest(unittest.TestCase):
     #測試 t67sb03
     def test_request_t67sb03(self):
         logging.info("ClientTest.test_request_t67sb03")
-        form_body = "encodeURIComponent=1&co_id=5846&TYPEK=pub&DATE1=20150105&SKEY=1&step=2&firstin=1"
+        form_body = "encodeURIComponent=1&step=2&TYPEK=pub&co_id=5846&DATE1=20150105&SKEY=1&firstin=1"
         ret = self.target.requestServer("t67sb03", form_body)
         tmpfile = open("res_t67sb03.html", "w+")
         tmpfile.write(ret)
