@@ -24,12 +24,23 @@ class ClientTest(unittest.TestCase):
     def tearDown(self):
         self.target = None
 
-    #測試XXX
-    def test_requestServer(self):
-        logging.info("ClientTest.test_requestServer")
-        ret = self.target.requestServer()
-        print(ret)
-
+    #測試 t146sb10
+    def test_request_t146sb10(self):
+        logging.info("ClientTest.test_request_t146sb10")
+        form_body = "encodeURIComponent=1&step=2&TYPEK=pub&co_id_1=&SDATE=20150101&EDATE=20151130&YEAR1=104&YEAR2=104&MONTH1=1&MONTH2=104&SDAY=1&EDAY=30&scope=2&sort=1&rpt=bool_t67sb07&firstin=1"
+        ret = self.target.requestServer("t146sb10", form_body)
+        tmpfile = open("res_t146sb10.html", "w+")
+        tmpfile.write(ret)
+        tmpfile.close()
+        
+    #測試 t67sb03
+    def test_request_t67sb03(self):
+        logging.info("ClientTest.test_request_t67sb03")
+        form_body = "encodeURIComponent=1&co_id=5846&TYPEK=pub&DATE1=20150105&SKEY=1&step=2&firstin=1"
+        ret = self.target.requestServer("t67sb03", form_body)
+        tmpfile = open("res_t67sb03.html", "w+")
+        tmpfile.write(ret)
+        tmpfile.close()
 
 #測試開始
 if __name__ == "__main__":
