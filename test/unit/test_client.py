@@ -9,7 +9,7 @@ import unittest
 import logging
 import codecs
 from mops.client import Client
-from mops.client import MopsHtmlParser
+from mops.client import MopsHtmlParser_1
 """
 測試
 """
@@ -19,7 +19,7 @@ class ClientTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
         self.cli = Client()
-        self.parser = MopsHtmlParser(convert_charrefs=True)
+        self.parser1 = MopsHtmlParser_1(convert_charrefs=True)
         
     #收尾
     def tearDown(self):
@@ -49,7 +49,7 @@ class ClientTest(unittest.TestCase):
         logging.info("ClientTest.test_html_parser")
         form_body = "encodeURIComponent=1&step=2&TYPEK=pub&co_id_1=&SDATE=20150101&EDATE=20151231&YEAR1=104&YEAR2=104&MONTH1=1&MONTH2=104&SDAY=1&EDAY=31&scope=2&sort=1&rpt=bool_t67sb07&firstin=1"
         htmldata = self.cli.requestServer("t146sb10", form_body)
-        self.parser.feed(htmldata)
+        self.parser1.feed(htmldata)
         
 
 #測試開始

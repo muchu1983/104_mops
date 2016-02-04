@@ -41,9 +41,9 @@ class Client:
         self.conn.close()
         
 #解析 html
-class MopsHtmlParser(HTMLParser):
+class MopsHtmlParser_1(HTMLParser):
     def __init__(self, **args):
-        super(MopsHtmlParser, self).__init__(**args)
+        super(MopsHtmlParser_1, self).__init__(**args)
         self.inTr = False
         self.inTd = False
         self.trDataList = []
@@ -51,7 +51,7 @@ class MopsHtmlParser(HTMLParser):
         
     def feed(self, data):
         data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
-        super(MopsHtmlParser, self).feed(data)
+        super(MopsHtmlParser_1, self).feed(data)
         
     def __del__(self):
         self.tmpfile.close()
@@ -63,8 +63,8 @@ class MopsHtmlParser(HTMLParser):
         if tag == "td":
             self.inTd = True
         if tag == "input":
-            if self.inTd and self.inTr == True:
-                if len(attrs) == 3 and attrs[1][1] == "詳細資料":
+            if self.inTd and self.inTr == True: #在 tr/td 內的 input
+                if len(attrs) == 3 and attrs[1] == ("value", "詳細資料"): #value 為 "詳細資料"
                     self.trDataList.append(attrs[2][1])
             
     def handle_endtag(self, tag):
