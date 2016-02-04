@@ -18,7 +18,7 @@ class Client:
     def __init__(self):
         self.conn = HTTPConnection("61.57.47.131", 80)
 
-    #對 mops server 送出訊息
+    #對 mops service 送出 POST
     def requestServer(self, ajaxService, form_body):
         headers = {"Accept":"*/*",
                    "Accept-Encoding":"gzip, deflate",
@@ -49,6 +49,10 @@ class MopsHtmlParser(HTMLParser):
         self.trDataList = []
         self.tmpfile = codecs.open("data.txt", "a+", "utf-8")
         
+    def feed(self, data):
+        data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
+        super(MopsHtmlParser, self).feed(data)
+        
     def __del__(self):
         self.tmpfile.close()
         
@@ -66,9 +70,7 @@ class MopsHtmlParser(HTMLParser):
     def handle_endtag(self, tag):
         if tag == "tr":
             self.inTr = False
-            if len(self.trDataList) != 4:
-                print(self.trDataList)
-            else:
+            if len(self.trDataList) == 4:
                 self.tmpfile.write(str(self.trDataList)+"\n")
         if tag == "td":
             self.inTd = False
