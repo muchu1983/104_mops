@@ -6,17 +6,18 @@ This file is part of BSD license
 <https://opensource.org/licenses/BSD-3-Clause>
 """
 from http.client import HTTPConnection
+from html.parser import HTMLParser
 import urllib.parse
+
 """
 
 """
 class Client:
-
     #構構子
     def __init__(self):
         self.conn = HTTPConnection("61.57.47.131", 80)
 
-    #對 t146sb10 送出訊息
+    #對 mops server 送出訊息
     def requestServer(self, ajaxService, form_body):
         headers = {"Accept":"*/*",
                    "Accept-Encoding":"gzip, deflate",
@@ -34,7 +35,35 @@ class Client:
         res_data = res_raw.decode("utf-8")
         return res_data
 
-    #關閉 server 連線
+    #關閉連線
     def closeConnection(self):
         self.conn.close()
+        
+#解析 html
+class MopsHtmlParser(HTMLParser):
+    def __init__(self, **args):
+        super(MopsHtmlParser, self).__init__(**args)
+        self.inTr = False
+        self.inTd = False
+        self.trDataList = []
+        self.tmpfile = open("data.txt", "a+")
+        
+    def __del__(self):
+        self.tmpfile.close()
+        
+    def handle_starttag(self, tag, attrs):
+        if tag == "tr":
+            self.inTr = True
+            self.trDataList = [] #準備新的list
+        if tag == "td":
+            self.inTd = True
+    def handle_endtag(self, tag):
+        if tag == "tr":
+            self.inTr = False
+            self.tmpfile.write(str(self.trDataList)+"\n")
+        if tag == "td":
+            self.inTd = False
+    def handle_data(self, data):
+        if self.inTr and self.inTd == True:
+            self.trDataList.append(data)
         
