@@ -8,6 +8,7 @@ This file is part of BSD license
 from http.client import HTTPConnection
 from html.parser import HTMLParser
 import urllib.parse
+import codecs
 
 """
 
@@ -46,7 +47,7 @@ class MopsHtmlParser(HTMLParser):
         self.inTr = False
         self.inTd = False
         self.trDataList = []
-        self.tmpfile = open("data.txt", "a+")
+        self.tmpfile = codecs.open("data.txt", "a+", "utf-8")
         
     def __del__(self):
         self.tmpfile.close()
@@ -57,12 +58,21 @@ class MopsHtmlParser(HTMLParser):
             self.trDataList = [] #準備新的list
         if tag == "td":
             self.inTd = True
+        if tag == "input":
+            if self.inTd and self.inTr == True:
+                #print(attrs)
+                pass
+            
     def handle_endtag(self, tag):
         if tag == "tr":
             self.inTr = False
-            self.tmpfile.write(str(self.trDataList)+"\n")
+            if len(self.trDataList) != 4:
+                print(self.trDataList)
+            else:
+                self.tmpfile.write(str(self.trDataList)+"\n")
         if tag == "td":
             self.inTd = False
+            
     def handle_data(self, data):
         if self.inTr and self.inTd == True:
             self.trDataList.append(data)
