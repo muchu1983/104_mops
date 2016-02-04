@@ -40,7 +40,7 @@ class Client:
     def closeConnection(self):
         self.conn.close()
         
-#解析 html
+#解析 t146sb10 response 將結果存入 data.txt
 class MopsHtmlParser_1(HTMLParser):
     def __init__(self, **args):
         super(MopsHtmlParser_1, self).__init__(**args)
@@ -80,3 +80,38 @@ class MopsHtmlParser_1(HTMLParser):
         if self.inTr and self.inTd == True:
             self.trDataList.append(data)
         
+#解析 t67sb03 將結果存入 excel 
+class MopsHtmlParser_2(HTMLParser):
+    def __init__(self, **args):
+        super(MopsHtmlParser_2, self).__init__(**args)
+        self.inTr = False
+        self.inTd = False
+        self.inTh = False
+        self.isMoneyTdNext = False
+
+    def feed(self, data):
+        data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
+        super(MopsHtmlParser_2, self).feed(data)
+        
+    def handle_starttag(self, tag, attrs):
+        if tag == "tr":
+            self.inTr = True
+        if tag == "th":
+            self.inTh = True
+        if tag == "td":
+            self.inTd = True
+            
+    def handle_endtag(self, tag):
+        if tag == "tr":
+            self.inTr = False
+        if tag == "th":
+            self.inTh = False
+        if tag == "td":
+            self.inTd = False
+            
+    def handle_data(self, data):
+        if self.inTr and self.inTh and data == "交易單位數量、每單位價格及交易總金額":
+            self.isMoneyTdNext = True
+        if self.inTr and self.inTd and self.isMoneyTdNext:
+            print(data)
+            self.isMoneyTdNext = False
