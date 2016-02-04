@@ -62,10 +62,11 @@ class MopsHtmlParser_1(HTMLParser):
             self.trDataList = [] #準備新的list
         if tag == "td":
             self.inTd = True
-        if tag == "input":
-            if self.inTd and self.inTr == True: #在 tr/td 內的 input
-                if len(attrs) == 3 and attrs[1] == ("value", "詳細資料"): #value 為 "詳細資料"
-                    self.trDataList.append(attrs[2][1])
+        if tag == "input": #解析 input
+            if self.inTd and self.inTr == True and \
+            len(attrs) == 3 and attrs[1] == ("value", "詳細資料"): 
+                #value 為 "詳細資料"
+                self.trDataList.append(attrs[2][1])
             
     def handle_endtag(self, tag):
         if tag == "tr":
