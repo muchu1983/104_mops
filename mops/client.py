@@ -88,6 +88,7 @@ class MopsHtmlParser_2(HTMLParser):
         self.inTd = False
         self.inTh = False
         self.isMoneyTdNext = False
+        self.isFundTdNext = False
 
     def feed(self, data):
         data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
@@ -112,6 +113,9 @@ class MopsHtmlParser_2(HTMLParser):
     def handle_data(self, data):
         if self.inTr and self.inTh and data == "交易單位數量、每單位價格及交易總金額":
             self.isMoneyTdNext = True
-        if self.inTr and self.inTd and self.isMoneyTdNext:
+        if self.inTr and self.inTh and data == "標的物之名稱及性質（屬特別股者，並應標明特別股約定發行條件，如股息率等）":
+            self.isFundTdNext = True
+        if self.inTr and self.inTd and (self.isMoneyTdNext or self.isFundTdNext):
             print(data)
             self.isMoneyTdNext = False
+            self.isFundTdNext = False
