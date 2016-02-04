@@ -64,13 +64,13 @@ class MopsHtmlParser(HTMLParser):
             self.inTd = True
         if tag == "input":
             if self.inTd and self.inTr == True:
-                #print(attrs)
-                pass
+                if len(attrs) == 3 and attrs[1][1] == "詳細資料":
+                    self.trDataList.append(attrs[2][1])
             
     def handle_endtag(self, tag):
         if tag == "tr":
             self.inTr = False
-            if len(self.trDataList) == 4:
+            if len(self.trDataList) == 5:
                 self.tmpfile.write(str(self.trDataList)+"\n")
         if tag == "td":
             self.inTd = False
