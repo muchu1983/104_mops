@@ -12,7 +12,8 @@ Processor 模組負責整合資料工作
 3. 整合資料格式以符合本案要求
 4. 產生 excel 檔
 """
-import datetime
+from datetime import datetime
+import re
 
 class Processor:
     
@@ -24,8 +25,8 @@ class Processor:
     #設定並檢查日期
     def setDateRange(self, fromDate, toDate):
         try:
-            datetime.datetime.strptime(fromDate, "%Y%m%d")
-            datetime.datetime.strptime(toDate, "%Y%m%d")
+            datetime.strptime(fromDate, "%Y%m%d")
+            datetime.strptime(toDate, "%Y%m%d")
         except ValueError:
             print("日期格式錯誤，正確是：yyyymmdd")
             return False
@@ -34,5 +35,14 @@ class Processor:
         
     #解析 p1_data.txt 取得 co_id DATE1 SKEY
     def parseP1DataLine(self, aLine):
-        pass
+        bLine = aLine.split("|#|#|#|")[4]
+        kvDict = {}
+        for cLine in bLine.split(";"):
+            m = re.match(r"(.*)=(.*)" ,cLine) 
+            if m != None:
+                kvDict[m.group(1)] = m.group(2).strip("\"")
+        ret = (kvDict["document.fm_t67sb07.co_id.value"],\
+               kvDict["document.fm_t67sb07.DATE1.value"],\
+               kvDict["document.fm_t67sb07.SKEY.value"])
+        return ret
         
