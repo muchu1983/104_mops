@@ -40,21 +40,24 @@ class Client:
     def closeConnection(self):
         self.conn.close()
         
-#解析 t146sb10 response 將結果存入 data.txt
+#解析 t146sb10 response 將結果存入 p1_data.txt
 class MopsHtmlParser_1(HTMLParser):
     def __init__(self, **args):
         super(MopsHtmlParser_1, self).__init__(**args)
         self.inTr = False
         self.inTd = False
         self.trDataList = []
-        self.tmpfile = codecs.open("data.txt", "a+", "utf-8")
+        self.p1file = codecs.open("p1_data.txt", "w+", "utf-8")
         
     def feed(self, data):
         data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
+        data = data.replace("\n", "") #去除 \n 以免影響 parse 
+        data = data.replace("\r", "") #去除 \r 以免影響 parse 
+        data = data.replace("\t", "") #去除 \t 以免影響 parse 
         super(MopsHtmlParser_1, self).feed(data)
         
     def __del__(self):
-        self.tmpfile.close()
+        self.p1file.close()
         
     def handle_starttag(self, tag, attrs):
         if tag == "tr":
@@ -72,7 +75,9 @@ class MopsHtmlParser_1(HTMLParser):
         if tag == "tr":
             self.inTr = False
             if len(self.trDataList) == 5:
-                self.tmpfile.write(str(self.trDataList)+"\n")
+                for data in self.trDataList:
+                    self.p1file.write(data+"|#|#|#|")
+                self.p1file.write("\n")
         if tag == "td":
             self.inTd = False
             
@@ -80,7 +85,7 @@ class MopsHtmlParser_1(HTMLParser):
         if self.inTr and self.inTd == True:
             self.trDataList.append(data)
         
-#解析 t67sb03 將結果存入 excel 
+#解析 t67sb03 將結果存入 temp_data.txt
 class MopsHtmlParser_2(HTMLParser):
     def __init__(self, **args):
         super(MopsHtmlParser_2, self).__init__(**args)
@@ -89,9 +94,16 @@ class MopsHtmlParser_2(HTMLParser):
         self.inTh = False
         self.isMoneyTdNext = False
         self.isFundTdNext = False
+        self.tempfile = codecs.open("temp_data.txt", "w+", "utf-8")
+        
+    def __del__(self):
+        self.tempfile.close()
 
     def feed(self, data):
         data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
+        data = data.replace("\n", "") #去除 \n 以免影響 parse 
+        data = data.replace("\r", "") #去除 \r 以免影響 parse 
+        data = data.replace("\t", "") #去除 \t 以免影響 parse 
         super(MopsHtmlParser_2, self).feed(data)
         
     def handle_starttag(self, tag, attrs):
@@ -116,6 +128,6 @@ class MopsHtmlParser_2(HTMLParser):
         if self.inTr and self.inTh and data == "標的物之名稱及性質（屬特別股者，並應標明特別股約定發行條件，如股息率等）":
             self.isFundTdNext = True
         if self.inTr and self.inTd and (self.isMoneyTdNext or self.isFundTdNext):
-            print(data)
+            self.tempfile.write(data+"\n")
             self.isMoneyTdNext = False
             self.isFundTdNext = False
