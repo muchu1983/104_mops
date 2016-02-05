@@ -12,7 +12,7 @@ from mops.client import Client
 from mops.client import MopsHtmlParser_1
 from mops.client import MopsHtmlParser_2
 """
-測試
+測試 Client 模組
 """
 class ClientTest(unittest.TestCase):
 

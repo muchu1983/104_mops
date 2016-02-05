@@ -11,6 +11,10 @@ import urllib.parse
 import codecs
 
 """
+Client 模組負責網路相關工作
+1. 連線到 mops server
+2. 存取 service
+3. 解析 response 資料
 
 """
 class Client:
