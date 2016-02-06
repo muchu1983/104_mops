@@ -55,3 +55,7 @@ class Processor:
         tempfile.close()
         return (nof, others)
         
+    #
+    def process(self):
+        pass
+        
