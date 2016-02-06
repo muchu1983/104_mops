@@ -13,6 +13,7 @@ Processor 模組負責整合資料工作
 4. 產生 excel 檔
 """
 from datetime import datetime
+import codecs
 import re
 
 class Processor:
@@ -45,4 +46,12 @@ class Processor:
                kvDict["document.fm_t67sb07.DATE1.value"],\
                kvDict["document.fm_t67sb07.SKEY.value"])
         return ret
+        
+    #解析 temp_data.txt 取得 NameOfFund Buy/Sell NoOfUnits  Currency UnitPrice TotalAmount
+    def parseTempData(self):
+        tempfile = codecs.open("temp_data.txt", "r", "utf-8")
+        nof = tempfile.readline().strip("\n")
+        others = tempfile.readline().strip("\n") #暫不解析  TODO 
+        tempfile.close()
+        return (nof, others)
         

@@ -42,7 +42,7 @@ class ProcessorTest(unittest.TestCase):
     #測試 parse temp_data.txt
     def test_parseTempData(self):
         logging.info("ProcessorTest.test_parseTempData")
-        pass
+        print(self.psr.parseTempData())
 
 #測試開始
 if __name__ == "__main__":
