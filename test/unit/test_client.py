@@ -7,7 +7,6 @@ This file is part of BSD license
 """
 import unittest
 import logging
-import codecs
 from mops.client import Client
 from mops.client import MopsHtmlParser_1
 from mops.client import MopsHtmlParser_2
@@ -30,18 +29,12 @@ class ClientTest(unittest.TestCase):
         logging.info("ClientTest.test_request_t146sb10")
         form_body = "encodeURIComponent=1&step=2&TYPEK=pub&co_id_1=&SDATE=20150101&EDATE=20151130&YEAR1=104&YEAR2=104&MONTH1=1&MONTH2=104&SDAY=1&EDAY=30&scope=2&sort=1&rpt=bool_t67sb07&firstin=1"
         ret = self.cli.requestServer("t146sb10", form_body)
-        tmpfile = codecs.open("res_t146sb10.html", "w+", "utf-8")
-        tmpfile.write(ret)
-        tmpfile.close()
         
     #測試 t67sb03
     def test_request_t67sb03(self):
         logging.info("ClientTest.test_request_t67sb03")
         form_body = "encodeURIComponent=1&step=2&TYPEK=pub&co_id=5846&DATE1=20150105&SKEY=1&firstin=1"
         ret = self.cli.requestServer("t67sb03", form_body)
-        tmpfile = codecs.open("res_t67sb03.html", "w+", "utf-8")
-        tmpfile.write(ret)
-        tmpfile.close()
         
     #測試 parser1
     def test_html_parser1(self):

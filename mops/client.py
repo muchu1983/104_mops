@@ -8,7 +8,6 @@ This file is part of BSD license
 from http.client import HTTPConnection
 from html.parser import HTMLParser
 import urllib.parse
-import codecs
 
 """
 Client 模組負責網路相關工作
@@ -51,16 +50,15 @@ class MopsHtmlParser_1(HTMLParser):
         self.inTr = False
         self.inTd = False
         self.trDataList = []
-        self.p1file = codecs.open("p1_data.txt", "w+", "utf-8")
+        self.p1file = None
         
     def feed(self, data):
         data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
         data = data.replace("\n", "") #去除 \n 以免影響 parse 
         data = data.replace("\r", "") #去除 \r 以免影響 parse 
         data = data.replace("\t", "") #去除 \t 以免影響 parse 
+        self.p1file = open("p1_data.txt", "w+", encoding="utf-8")
         super(MopsHtmlParser_1, self).feed(data)
-        
-    def __del__(self):
         self.p1file.close()
         
     def handle_starttag(self, tag, attrs):
@@ -98,17 +96,16 @@ class MopsHtmlParser_2(HTMLParser):
         self.inTh = False
         self.isMoneyTdNext = False
         self.isFundTdNext = False
-        self.tempfile = codecs.open("temp_data.txt", "w+", "utf-8")
-        
-    def __del__(self):
-        self.tempfile.close()
+        self.tempfile = None
 
     def feed(self, data):
         data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
         data = data.replace("\n", "") #去除 \n 以免影響 parse 
         data = data.replace("\r", "") #去除 \r 以免影響 parse 
         data = data.replace("\t", "") #去除 \t 以免影響 parse 
+        self.tempfile = open("temp_data.txt", "w+", encoding="utf-8")
         super(MopsHtmlParser_2, self).feed(data)
+        self.tempfile.close()
         
     def handle_starttag(self, tag, attrs):
         if tag == "tr":
