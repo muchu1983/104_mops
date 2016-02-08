@@ -86,13 +86,12 @@ class Processor:
         parser1 = MopsHtmlParser_1(convert_charrefs=True)
         parser1.feed(res_t146sb10) #p1_data.txt file 已建立
         p1file = open("p1_data.txt", "r", encoding="utf-8")
-        c = 0
-        for aLine in p1file:
-            c = c+1
-            print(c)
+        for aLine in p1file:#逐行解析
+            (co_id, DATE1, SKEY) = self.parseP1DataLine(aLine)
+            
         p1file.close()
         
-            #self.psr.parseP1DataLine(aLine)
+            
         
         
         
