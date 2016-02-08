@@ -103,9 +103,9 @@ class MopsHtmlParser_2(HTMLParser):
         data = data.replace("\n", "") #去除 \n 以免影響 parse 
         data = data.replace("\r", "") #去除 \r 以免影響 parse 
         data = data.replace("\t", "") #去除 \t 以免影響 parse 
-        self.tempfile = open("temp_data.txt", "w+", encoding="utf-8")
+        #self.tempfile = open("temp_data.txt", "w+", encoding="utf-8")
         super(MopsHtmlParser_2, self).feed(data)
-        self.tempfile.close()
+        #self.tempfile.close()
         
     def handle_starttag(self, tag, attrs):
         if tag == "tr":
@@ -129,6 +129,7 @@ class MopsHtmlParser_2(HTMLParser):
         if self.inTr and self.inTh and data == "標的物之名稱及性質（屬特別股者，並應標明特別股約定發行條件，如股息率等）":
             self.isFundTdNext = True
         if self.inTr and self.inTd and (self.isMoneyTdNext or self.isFundTdNext):
-            self.tempfile.write(data+"\n")
+            #self.tempfile.write(data+"\n")
+            print(data)
             self.isMoneyTdNext = False
             self.isFundTdNext = False

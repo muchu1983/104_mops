@@ -54,7 +54,7 @@ class ProcessorTest(unittest.TestCase):
         
     #測試 執行抓取網頁與分析程序
     def test_process(self):
-        self.psr.setDateRange("20150101", "20151231")
+        self.psr.setDateRange("20150101", "20150110")
         self.psr.runProcess()
 
 #測試開始

@@ -15,6 +15,7 @@ Processor 模組負責整合資料工作
 from datetime import datetime
 import re
 import os
+import time
 from mops.client import Client
 from mops.client import MopsHtmlParser_1
 from mops.client import MopsHtmlParser_2
@@ -72,23 +73,29 @@ class Processor:
     #執行抓取網頁與分析程序
     def runProcess(self):
         dateRange = self.getDateRange()
-        # template(SDATE, EDATE, YEAR1, YEAR2, MONTH1, MONTH2, SDAY, EDAY)
-        form_template = "encodeURIComponent=1&step=2&TYPEK=pub&co_id_1=&SDATE=%s&EDATE=%s&YEAR1=%d&YEAR2=%d&MONTH1=%d&MONTH2=%d&SDAY=%d&EDAY=%d&scope=2&sort=1&rpt=bool_t67sb07&firstin=1"
-        form_body = form_template % (dateRange[0].strftime("%Y%m%d"), #SDATE
-                                     dateRange[1].strftime("%Y%m%d"), #EDATE
-                                     dateRange[0].year - 1911, #YEAR1
-                                     dateRange[1].year - 1911, #YEAR2
-                                     dateRange[0].month, #MONTH1
-                                     dateRange[1].year - 1911, #MONTH2
-                                     dateRange[0].day, #SDAY
-                                     dateRange[1].day) #EDAY
-        res_t146sb10 = self.cli.requestServer("t146sb10", form_body)
+        #form A template(SDATE, EDATE, YEAR1, YEAR2, MONTH1, MONTH2, SDAY, EDAY)
+        formA_template = "encodeURIComponent=1&step=2&TYPEK=pub&co_id_1=&SDATE=%s&EDATE=%s&YEAR1=%d&YEAR2=%d&MONTH1=%d&MONTH2=%d&SDAY=%d&EDAY=%d&scope=2&sort=1&rpt=bool_t67sb07&firstin=1"
+        formA_body = formA_template % (dateRange[0].strftime("%Y%m%d"), #SDATE
+                                       dateRange[1].strftime("%Y%m%d"), #EDATE
+                                       dateRange[0].year - 1911, #YEAR1
+                                       dateRange[1].year - 1911, #YEAR2
+                                       dateRange[0].month, #MONTH1
+                                       dateRange[1].year - 1911, #MONTH2
+                                       dateRange[0].day, #SDAY
+                                       dateRange[1].day) #EDAY
+        res_t146sb10 = self.cli.requestServer("t146sb10", formA_body)
         parser1 = MopsHtmlParser_1(convert_charrefs=True)
         parser1.feed(res_t146sb10) #p1_data.txt file 已建立
         p1file = open("p1_data.txt", "r", encoding="utf-8")
         for aLine in p1file:#逐行解析
             (co_id, DATE1, SKEY) = self.parseP1DataLine(aLine)
-            
+            #form B template (co_id, DATE1, SKEY)
+            formB_template = "encodeURIComponent=1&step=2&TYPEK=pub&co_id=%s&DATE1=%s&SKEY=%s&firstin=1"
+            formB_body = formB_template % (co_id, DATE1, SKEY)
+            res_t67sb03 = self.cli.requestServer("t67sb03", formB_body)
+            parser2 = MopsHtmlParser_2(convert_charrefs=True)
+            parser2.feed(res_t67sb03)
+            time.sleep(5)
         p1file.close()
         
             
