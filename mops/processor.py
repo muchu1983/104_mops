@@ -109,7 +109,6 @@ class Processor:
                                 "NA",
                                 p2_data["comment"]))
             print(p1_data[2])
-            time.sleep(10)#減慢傳送速度，以免被server中斷連線
         p1file.close()
         xlsfile.saveExcelFile()
         
