@@ -90,8 +90,8 @@ class Processor:
         parser1 = MopsHtmlParser_1(convert_charrefs=True)
         parser1.feed(res_t146sb10) #p1_data.txt file 已建立
         p1file = open("p1_data.txt", "r", encoding="utf-8")
-        lines = len(p1file.readlines())#總筆數計算執行進度(pointer已移到EOF)
-        p1file.seek(0)
+        lines = len(p1file.readlines())#總筆數計算執行進度 (pointer 已被移到EOF)
+        p1file.seek(0) #pointer 移到最開始位置
         handledLine = 0
         for aLine in p1file:#逐行解析
             handledLine = handledLine+1
