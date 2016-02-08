@@ -29,6 +29,7 @@ class Processor:
         self.toDate = None
         self.cli = Client()
         self.progress = 0
+        self.progressObserver = []
     
     #設定並檢查日期
     def setDateRange(self, fromDate, toDate):
@@ -96,6 +97,8 @@ class Processor:
         for aLine in p1file:#逐行解析
             handledLine = handledLine+1
             self.progress = int((handledLine/lines)*100)
+            for ob in self.progressObserver:
+                ob.updateProgress(self.progress) #observer 需實作 updateProgress
             (co_id, DATE1, SKEY) = self.parseP1DataLine(aLine)
             #form B template (co_id, DATE1, SKEY)
             formB_template = "encodeURIComponent=1&step=2&TYPEK=pub&co_id=%s&DATE1=%s&SKEY=%s&firstin=1"
@@ -114,11 +117,12 @@ class Processor:
                                 "NA",
                                 "NA",
                                 p2_data["comment"]))
-            print(self.progress , "%")
         p1file.close()
         xlsfile.saveExcelFile()
         
-            
+    #註冊觀察進度者物件
+    def registerProgressObserver(self, observer):
+        self.progressObserver.append(observer)
         
         
         
