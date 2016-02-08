@@ -19,6 +19,7 @@ import time
 from mops.client import Client
 from mops.client import MopsHtmlParser_1
 from mops.client import MopsHtmlParser_2
+from mops.xlwtwrapper import XlwtWrapper
 
 class Processor:
     
@@ -72,6 +73,7 @@ class Processor:
         
     #執行抓取網頁與分析程序
     def runProcess(self):
+        xlsfile = XlwtWrapper()
         dateRange = self.getDateRange()
         #form A template(SDATE, EDATE, YEAR1, YEAR2, MONTH1, MONTH2, SDAY, EDAY)
         formA_template = "encodeURIComponent=1&step=2&TYPEK=pub&co_id_1=&SDATE=%s&EDATE=%s&YEAR1=%d&YEAR2=%d&MONTH1=%d&MONTH2=%d&SDAY=%d&EDAY=%d&scope=2&sort=1&rpt=bool_t67sb07&firstin=1"
@@ -95,8 +97,21 @@ class Processor:
             res_t67sb03 = self.cli.requestServer("t67sb03", formB_body)
             parser2 = MopsHtmlParser_2(convert_charrefs=True)
             parser2.feed(res_t67sb03)
-            time.sleep(5)
+            p2_data = parser2.getP2Data()
+            p1_data = aLine.split("|#|#|#|")
+            xlsfile.addRowData((p1_data[2],
+                                p1_data[1],
+                                "NA",
+                                p2_data["nof"],
+                                "NA",
+                                "NA",
+                                "NA",
+                                "NA",
+                                p2_data["comment"]))
+            print(p1_data[2])
+            time.sleep(10)#減慢傳送速度，以免被server中斷連線
         p1file.close()
+        xlsfile.saveExcelFile()
         
             
         

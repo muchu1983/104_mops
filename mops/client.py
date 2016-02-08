@@ -94,18 +94,17 @@ class MopsHtmlParser_2(HTMLParser):
         self.inTr = False
         self.inTd = False
         self.inTh = False
-        self.isMoneyTdNext = False
-        self.isFundTdNext = False
+        self.isCommentTdNext = False
+        self.isNofTdNext = False
         self.tempfile = None
+        self.p2_data = {"nof":None, "comment":None}
 
     def feed(self, data):
         data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
         data = data.replace("\n", "") #去除 \n 以免影響 parse 
         data = data.replace("\r", "") #去除 \r 以免影響 parse 
         data = data.replace("\t", "") #去除 \t 以免影響 parse 
-        #self.tempfile = open("temp_data.txt", "w+", encoding="utf-8")
         super(MopsHtmlParser_2, self).feed(data)
-        #self.tempfile.close()
         
     def handle_starttag(self, tag, attrs):
         if tag == "tr":
@@ -125,11 +124,16 @@ class MopsHtmlParser_2(HTMLParser):
             
     def handle_data(self, data):
         if self.inTr and self.inTh and data == "交易單位數量、每單位價格及交易總金額":
-            self.isMoneyTdNext = True
+            self.isCommentTdNext = True
         if self.inTr and self.inTh and data == "標的物之名稱及性質（屬特別股者，並應標明特別股約定發行條件，如股息率等）":
-            self.isFundTdNext = True
-        if self.inTr and self.inTd and (self.isMoneyTdNext or self.isFundTdNext):
-            #self.tempfile.write(data+"\n")
-            print(data)
-            self.isMoneyTdNext = False
-            self.isFundTdNext = False
+            self.isNofTdNext = True
+        if self.inTr and self.inTd and self.isCommentTdNext: #交易單位數量、每單位價格及交易總金額
+            self.p2_data["comment"] = data
+            self.isCommentTdNext = False
+        if self.inTr and self.inTd and self.isNofTdNext: #標的物之名稱及性質（屬特別股者，並應標明特別股約定發行條件，如股息率等）
+            self.p2_data["nof"] = data
+            self.isNofTdNext = False
+            
+    #取回解析結果
+    def getP2Data(self):
+        return self.p2_data
