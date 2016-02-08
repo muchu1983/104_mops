@@ -87,7 +87,7 @@ class MopsHtmlParser_1(HTMLParser):
         if self.inTr and self.inTd == True:
             self.trDataList.append(data)
         
-#解析 t67sb03 將結果存入 temp_data.txt
+#解析 t67sb03 將結果存入 p2_data
 class MopsHtmlParser_2(HTMLParser):
     def __init__(self, **args):
         super(MopsHtmlParser_2, self).__init__(**args)

@@ -28,6 +28,7 @@ class Processor:
         self.fromDate = None
         self.toDate = None
         self.cli = Client()
+        self.progress = 0
     
     #設定並檢查日期
     def setDateRange(self, fromDate, toDate):
@@ -89,7 +90,12 @@ class Processor:
         parser1 = MopsHtmlParser_1(convert_charrefs=True)
         parser1.feed(res_t146sb10) #p1_data.txt file 已建立
         p1file = open("p1_data.txt", "r", encoding="utf-8")
+        lines = len(p1file.readlines())#總筆數計算執行進度(pointer已移到EOF)
+        p1file.seek(0)
+        handledLine = 0
         for aLine in p1file:#逐行解析
+            handledLine = handledLine+1
+            self.progress = int((handledLine/lines)*100)
             (co_id, DATE1, SKEY) = self.parseP1DataLine(aLine)
             #form B template (co_id, DATE1, SKEY)
             formB_template = "encodeURIComponent=1&step=2&TYPEK=pub&co_id=%s&DATE1=%s&SKEY=%s&firstin=1"
@@ -108,7 +114,7 @@ class Processor:
                                 "NA",
                                 "NA",
                                 p2_data["comment"]))
-            print(p1_data[2])
+            print(self.progress , "%")
         p1file.close()
         xlsfile.saveExcelFile()
         
