@@ -2,17 +2,8 @@
 3.4.4
 
 使用 pip-win 安裝的第三方庫
-Pillow
+xlwt
 PyInstaller
-
-kivy 安裝 (python ver 3.4)
-pip install --upgrade pip wheel setuptools
-pip install docutils pygments pypiwin32
-pip install kivy.deps.sdl2 kivy.deps.glew --extra-index-url https://kivy.org/downloads/packages/simple/
-pip install kivy
-
-免費的 SQLite3 Browser
-SQLiteStudio
 
 Notepad++ 執行設定值
 CTRL + F6

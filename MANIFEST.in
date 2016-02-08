@@ -1,3 +1,3 @@
 include LICENSE
-recursive-include united_res *
+recursive-include mops_res *
 recursive-exclude test *

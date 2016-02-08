@@ -8,17 +8,11 @@ This file is part of BSD license
 """
 程式進入點 (main)
 """
-import kivy
-kivy.require('1.9.0')
+from mops.ui.dashboard import Dashboard
 
-from kivy.app import App
-from kivy.uix.label import Label
-
-class MyApp(App):
-
-    def build(self):
-        return Label(text='hello mops')
+def entry_point():
+    Dashboard().showup()
 
 
 if __name__ == '__main__':
-    MyApp().run()
+    entry_point()

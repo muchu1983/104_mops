@@ -49,6 +49,3 @@ class Dashboard:
         psr = Processor()
         psr.setDateRange(sdate, edate)
         psr.runProcess()
-        
-if __name__ == '__main__':
-    Dashboard().showup()
