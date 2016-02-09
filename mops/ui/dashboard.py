@@ -39,6 +39,7 @@ class Dashboard:
         
     #確定開始執行抓取資料
     def runProcess(self):
+        self.goBtn.config(state="disabled")
         try:
             sdate = self.sdateE.get()
             edate = self.edateE.get()
@@ -52,8 +53,9 @@ class Dashboard:
         psr.setDateRange(sdate, edate)
         psr.registerProgressObserver(self) #observer 需實作 updateProgress
         psr.runProcess()
+        self.goBtn.config(state="normal")
         
     #進度更新
     def updateProgress(self, progress):
-        self.stateV.set("進度：" + str(progress))
+        self.stateV.set("進度：" + str(progress) + "%")
         self.statebarL.update_idletasks()

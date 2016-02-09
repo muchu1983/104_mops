@@ -94,11 +94,14 @@ class Processor:
         lines = len(p1file.readlines())#總筆數計算執行進度 (pointer 已被移到EOF)
         p1file.seek(0) #pointer 移到最開始位置
         handledLine = 0
+        restPonit = 10 #每10筆資料休息10秒
         for aLine in p1file:#逐行解析
             handledLine = handledLine+1
             self.progress = int((handledLine/lines)*100)
             for ob in self.progressObserver:
                 ob.updateProgress(self.progress) #observer 需實作 updateProgress
+            if handledLine%restPonit == 0:
+                time.sleep(10)#休息
             (co_id, DATE1, SKEY) = self.parseP1DataLine(aLine)
             #form B template (co_id, DATE1, SKEY)
             formB_template = "encodeURIComponent=1&step=2&TYPEK=pub&co_id=%s&DATE1=%s&SKEY=%s&firstin=1"
