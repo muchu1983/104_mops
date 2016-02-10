@@ -113,12 +113,12 @@ class Processor:
             p1_data = aLine.split("|#|#|#|")
             xlsfile.addRowData((p1_data[2],
                                 p1_data[1],
-                                "NA",
+                                p2_data["B/S"],
                                 p2_data["nof"],
+                                p2_data["No. of U"],
                                 "NA",
-                                "NA",
-                                "NA",
-                                "NA",
+                                p2_data["Unit Price"],
+                                p2_data["Total Amount"],
                                 p2_data["comment"]))
         p1file.close()
         xlsfile.saveExcelFile()

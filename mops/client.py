@@ -8,6 +8,7 @@ This file is part of BSD license
 from http.client import HTTPConnection
 from html.parser import HTMLParser
 import urllib.parse
+import re
 
 """
 Client 模組負責網路相關工作
@@ -97,7 +98,12 @@ class MopsHtmlParser_2(HTMLParser):
         self.isCommentTdNext = False
         self.isNofTdNext = False
         self.tempfile = None
-        self.p2_data = {"nof":None, "comment":None}
+        self.p2_data = {"nof":None,
+                        "B/S":None,
+                        "No. of U":None,
+                        "Unit Price":None,
+                        "Total Amount":None,
+                        "comment":None}
 
     def feed(self, data):
         data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
@@ -128,7 +134,14 @@ class MopsHtmlParser_2(HTMLParser):
         if self.inTr and self.inTh and data == "標的物之名稱及性質（屬特別股者，並應標明特別股約定發行條件，如股息率等）":
             self.isNofTdNext = True
         if self.inTr and self.inTd and self.isCommentTdNext: #交易單位數量、每單位價格及交易總金額
-            self.p2_data["comment"] = data
+            self.p2_data["comment"] = data #交易資料(完整)
+            p = re.compile("^共(買進|申購|處分|贖回|交易)(.*)單位淨值:(.*)交易總金額:(.*)")
+            m = p.match(data)
+            if m != None:
+                self.p2_data["B/S"] = m.group(1)
+                self.p2_data["No. of U"] = m.group(2)
+                self.p2_data["Unit Price"] = m.group(3)
+                self.p2_data["Total Amount"] = m.group(4)
             self.isCommentTdNext = False
         if self.inTr and self.inTd and self.isNofTdNext: #標的物之名稱及性質（屬特別股者，並應標明特別股約定發行條件，如股息率等）
             self.p2_data["nof"] = data
