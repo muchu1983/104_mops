@@ -19,6 +19,7 @@ class Dashboard:
     def showup(self):
         self.psr = Processor()
         self.root = Tk()
+        self.root.title("MOPS資訊觀測站")
         frame = Frame(self.root)
         frame.grid(row=0, column=0, sticky="news")
         self.stateV = StringVar()
