@@ -8,6 +8,7 @@ This file is part of BSD license
 from datetime import datetime
 from tkinter import Tk,Frame,Grid,Label,Button,Entry,StringVar
 from mops.processor import Processor
+from threading import Timer
 """
 儀表板主畫面
 """
@@ -16,6 +17,7 @@ class Dashboard:
     
     #顯示儀表板
     def showup(self):
+        self.psr = Processor()
         self.root = Tk()
         frame = Frame(self.root)
         frame.grid(row=0, column=0, sticky="news")
@@ -49,13 +51,15 @@ class Dashboard:
             self.stateV.set("日期格式錯誤，正確為：yyyymmdd")
             return None
         print("from " + sdate + " to " + edate)
-        psr = Processor()
-        psr.setDateRange(sdate, edate)
-        psr.registerProgressObserver(self) #observer 需實作 updateProgress
-        psr.runProcess()
-        self.goBtn.config(state="normal")
+        self.psr.setDateRange(sdate, edate)
+        self.psr.registerProgressObserver(self) #observer 需實作 updateProgress
+        t = Timer(0, self.psr.runProcess) #啟動另一個 thread 執行，畫面才不會「沒有回應」
+        t.start()
         
     #進度更新
     def updateProgress(self, progress):
         self.stateV.set("進度：" + str(progress) + "%")
-        self.root.update_idletasks()
+        if progress == 100:
+            self.goBtn.config(state="normal")
+            self.stateV.set("已完成。重新輸入日期：yyyymmdd")
+        
