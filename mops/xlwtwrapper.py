@@ -15,7 +15,7 @@ class XlwtWrapper:
 
     def __init__(self, filename=None):
         self.filename = filename
-        style0 = xlwt.easyxf('font: name Times New Roman, bold on')
+        style0 = xlwt.easyxf("font: name Times New Roman, bold on")
         self.wb = xlwt.Workbook(encoding="utf-8")
         self.ws = self.wb.add_sheet("mops sheet", cell_overwrite_ok=True)
         self.rowPointer = 0
