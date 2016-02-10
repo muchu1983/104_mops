@@ -16,8 +16,8 @@ class Dashboard:
     
     #顯示儀表板
     def showup(self):
-        root = Tk()
-        frame = Frame(root)
+        self.root = Tk()
+        frame = Frame(self.root)
         frame.grid(row=0, column=0, sticky="news")
         self.stateV = StringVar()
         self.stateV.set("日期格式：yyyymmdd")
@@ -33,9 +33,9 @@ class Dashboard:
         self.sdateE.grid(row=1, column=1, rowspan=1, columnspan=1, sticky="news")
         self.edateE.grid(row=2, column=1, rowspan=1, columnspan=1, sticky="news")
         self.goBtn.grid(row=1, column=2, rowspan=2, columnspan=1, sticky="news")
-        Grid.grid_rowconfigure(root, 0, weight=1)
-        Grid.grid_columnconfigure(root, 0, weight=1)
-        root.mainloop()
+        Grid.grid_rowconfigure(self.root, 0, weight=1)
+        Grid.grid_columnconfigure(self.root, 0, weight=1)
+        self.root.mainloop()
         
     #確定開始執行抓取資料
     def runProcess(self):
@@ -58,4 +58,4 @@ class Dashboard:
     #進度更新
     def updateProgress(self, progress):
         self.stateV.set("進度：" + str(progress) + "%")
-        self.statebarL.update_idletasks()
+        self.root.update_idletasks()
