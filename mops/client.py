@@ -55,9 +55,7 @@ class MopsHtmlParser_1(HTMLParser):
         
     def feed(self, data):
         data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
-        data = data.replace("\n", "") #去除 \n 以免影響 parse 
-        data = data.replace("\r", "") #去除 \r 以免影響 parse 
-        data = data.replace("\t", "") #去除 \t 以免影響 parse 
+        data = re.sub("[\\n\\r\\t\\f\\v]", "", data) #去除換行及空白字元
         self.p1file = open("p1_data.txt", "w+", encoding="utf-8")
         super(MopsHtmlParser_1, self).feed(data)
         self.p1file.close()
@@ -107,9 +105,7 @@ class MopsHtmlParser_2(HTMLParser):
 
     def feed(self, data):
         data = data.replace("<br>", "") #去除 <br> tag 以免影響 parse 
-        data = data.replace("\n", "") #去除 \n 以免影響 parse 
-        data = data.replace("\r", "") #去除 \r 以免影響 parse 
-        data = data.replace("\t", "") #去除 \t 以免影響 parse 
+        data = re.sub("[\\n\\r\\t\\f\\v]", "", data) #去除換行及空白字元
         super(MopsHtmlParser_2, self).feed(data)
         
     def handle_starttag(self, tag, attrs):
@@ -135,13 +131,14 @@ class MopsHtmlParser_2(HTMLParser):
             self.isNofTdNext = True
         if self.inTr and self.inTd and self.isCommentTdNext: #交易單位數量、每單位價格及交易總金額
             self.p2_data["comment"] = data #交易資料(完整)
-            p = re.compile("^共(買進|申購|處分|處份|贖回|交易)(.*)單位.*淨值(.*[0-9]{1}).*金額(.*[0-9]{1}).*$")
+            data = re.sub("[\\n\\r\\t\\f\\v\\,\\:;：； ]", "", data)
+            p = re.compile("共?(買進|申購|處分|處份|贖回|交易)(\d+).*淨值(.*)(美元|新台幣).*金額約?(\d+)(美元|新台幣)")
             m = p.match(data)
             if m != None:
                 self.p2_data["B/S"] = m.group(1)
                 self.p2_data["No. of U"] = m.group(2)
                 self.p2_data["Unit Price"] = m.group(3)
-                self.p2_data["Total Amount"] = m.group(4)
+                self.p2_data["Total Amount"] = m.group(5)
             self.isCommentTdNext = False
         if self.inTr and self.inTd and self.isNofTdNext: #標的物之名稱及性質（屬特別股者，並應標明特別股約定發行條件，如股息率等）
             self.p2_data["nof"] = data
