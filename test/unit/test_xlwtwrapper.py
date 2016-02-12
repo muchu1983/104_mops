@@ -24,20 +24,14 @@ class XlwtWrapperTest(unittest.TestCase):
     #收尾
     def tearDown(self):
         pass
-
-    #測試建立檔案
-    def test_initial(self):
-        logging.info("XlwtWrapperTest.test_initial")
-        wrapper = XlwtWrapper()
-        wrapper.saveExcelFile()
     
     #測試寫入行資料
     def test_addRowData(self):
         logging.info("XlwtWrapperTest.test_addRowData")
         wrapper = XlwtWrapper()
-        wrapper.addRowData(("20160208", "ABC", "B", "DEF", "123", "TWD", "456", "789", "DEF"))
+        for i in range(5000):
+            wrapper.addRowData(("20160208", "中文字", "B", "DEF", "123", "TWD", "456", "789", "DEF"))
         wrapper.saveExcelFile()
-
 
 #測試開始
 if __name__ == "__main__":

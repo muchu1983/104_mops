@@ -22,7 +22,7 @@ setup(
     long_description=long_description,
     packages = find_packages(),
     include_package_data = True,
-    install_requires = ["PyInstaller>=3.1","xlwt>=1.0.0"],
+    install_requires = ["PyInstaller>=3.1","openpyxl>=2.3.3"],
     platforms = "python 3.4",
     entry_points={"console_scripts":["mops=mops.launcher:entry_point"]},
     classifiers=[

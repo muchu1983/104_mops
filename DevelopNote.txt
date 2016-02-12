@@ -2,7 +2,7 @@
 3.4.4
 
 使用 pip-win 安裝的第三方庫
-xlwt
+openpyxl
 PyInstaller
 
 Notepad++ 執行設定值
