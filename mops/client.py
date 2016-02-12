@@ -132,7 +132,7 @@ class MopsHtmlParser_2(HTMLParser):
         if self.inTr and self.inTd and self.isCommentTdNext: #交易單位數量、每單位價格及交易總金額
             self.p2_data["comment"] = data #交易資料(完整)
             data = re.sub("[\\n\\r\\t\\f\\v\\,\\:;：； ]", "", data)
-            #p = re.compile("共?(買進|申購|處分|處份|贖回|交易|取得).*(\d+).*(淨值|價格)(.*)金額.*(\d+).*")
+            p = re.compile("共?(買進|申購|處分|處份|贖回|交易|取得)(\d+\\.?\d+).*?(淨值|價格)(.*)金額.*?(\d+\\.?\d+).*?")
             m = p.match(data)
             if m != None:
                 self.p2_data["B/S"] = m.group(1)
