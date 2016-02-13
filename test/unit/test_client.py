@@ -22,7 +22,7 @@ class ClientTest(unittest.TestCase):
         
     #收尾
     def tearDown(self):
-        pass
+        self.cli.closeConnection()
 
     #測試 t146sb10
     def test_request_t146sb10(self):

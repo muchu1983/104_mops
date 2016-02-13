@@ -20,10 +20,11 @@ Client 模組負責網路相關工作
 class Client:
     #構構子
     def __init__(self):
-        self.conn = HTTPConnection("61.57.47.131", 80)
+        self.conn = None
 
     #對 mops service 送出 POST
     def requestServer(self, ajaxService, form_body):
+        self.conn = HTTPConnection("61.57.47.131", 80)
         headers = {"Accept":"*/*",
                    "Accept-Encoding":"gzip, deflate",
                    "Accept-Language":"zh-TW,zh;q=0.8,en-US;q=0.6,en;q=0.4",

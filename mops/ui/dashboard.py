@@ -63,6 +63,4 @@ class Dashboard:
         if progress == 100:
             self.goBtn.config(state="normal")
             self.stateV.set("已完成。重新輸入日期：yyyymmdd")
-        if type(progress) == str:
-            self.stateV.set("錯誤！" + progress)
         

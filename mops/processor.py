@@ -89,20 +89,21 @@ class Processor:
                                        dateRange[0].day, #SDAY
                                        dateRange[1].day) #EDAY
         res_t146sb10 = self.cli.requestServer("t146sb10", formA_body)
+        self.cli.closeConnection()
         parser1 = MopsHtmlParser_1(convert_charrefs=True)
         parser1.feed(res_t146sb10) #p1_data.txt file 已建立
         p1file = open("p1_data.txt", "r", encoding="utf-8")
         lines = len(p1file.readlines())#總筆數計算執行進度 (pointer 已被移到EOF)
         p1file.seek(0) #pointer 移到最開始位置
         handledLine = 0
-        restPonit = 2
         for aLine in p1file:#逐行解析
             handledLine = handledLine+1
             self.progress = int((handledLine/lines)*100)
-            for ob in self.progressObserver:
+            for ob in self.progressObserver:#通知 observer 目前進度
                 ob.updateProgress(self.progress) #observer 需實作 updateProgress
-            if handledLine%restPonit == 0:
-                time.sleep(randint(5, 10))#每2筆資料休息5-10秒
+            if handledLine%100 == 0:
+                time.sleep(randint(30, 60))#每100筆資料休息30-60秒
+            time.sleep(randint(1, 3))#每筆資料休息1-3秒
             (co_id, DATE1, SKEY) = self.parseP1DataLine(aLine)
             #form B template (co_id, DATE1, SKEY)
             formB_template = "encodeURIComponent=1&step=2&TYPEK=pub&co_id=%s&DATE1=%s&SKEY=%s&firstin=1"
@@ -110,9 +111,10 @@ class Processor:
             try:
                 res_t67sb03 = self.cli.requestServer("t67sb03", formB_body)
             except Exception:
-                for ob in self.progressObserver:#通知 observer 發生例外狀況
-                    ob.updateProgress("t67sb03 連線被拒絕。(略過)") #observer 需實作 updateProgress
+                print("t67sb03 連線被拒絕。(略過)")
                 continue
+            finally:
+                self.cli.closeConnection()
             parser2 = MopsHtmlParser_2(convert_charrefs=True)
             parser2.feed(res_t67sb03)
             p2_data = parser2.getP2Data()
