@@ -7,7 +7,7 @@ PyInstaller
 
 Notepad++ 執行設定值
 CTRL + F6
-cmd /k cd "C:\Users\muchu\Desktop\104Workspace\001-資訊觀測站\MOPS_git_code" & c:\python34\python "$(FULL_CURRENT_PATH)" & ECHO & PAUSE & EXIT
+cmd /k cd "C:\Users\muchu\Desktop\caseWorkspace\001-資訊觀測站\MOPS_git_code" & c:\python34\python "$(FULL_CURRENT_PATH)" & ECHO & PAUSE & EXIT
 
 PyInstaller
 cmd shell cd 到 MOPS_git_code目錄下
